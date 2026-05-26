@@ -10,13 +10,12 @@ public class RoomInventory {
     private int doubleRoom = 7;
     private int suite = 3;
 
-    //Count the available rooms-NEW — called by RoomController, bridges enum → String
-    public int getAvailableCount(RoomType type){
 
+    public int getAvailableCount(RoomType type){
         return getAvailable(type.name());
     }
 
-    //Get the rooms which are available
+
     public int getAvailable(String roomType) {
         return switch (roomType) {
             case "SingleRoom" -> singleRoom;
@@ -26,7 +25,6 @@ public class RoomInventory {
         };
     }
 
-    //Decrease the rooms
     public boolean decreaseRoom(String roomType){
         return switch (roomType){
             case "SingleRoom" -> {
@@ -54,7 +52,7 @@ public class RoomInventory {
 
         };
     }
-    //Increase Rooms
+
     public void increaseRoom(String roomType){
         switch (roomType){
             case "SingleRoom" -> singleRoom++;
