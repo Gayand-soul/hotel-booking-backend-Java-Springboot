@@ -13,15 +13,13 @@ import java.util.List;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-    //instance variable
     private  final BookingService bookingService;
 
-    //constructor
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
-    //POST /api/bookings-USER and ADMIN
+
     @PostMapping
     public ResponseEntity<Booking> createBooking(@Valid @RequestBody Booking booking){
 
@@ -29,19 +27,18 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    //GET /api/bookings-ADMIN ONLY
     @GetMapping
     public ResponseEntity<List<Booking>> getAllBookings(){
         return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
-    //Delete /api/bookings/{id} - ADMIN ONLY
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
 
         boolean deleted = bookingService.deleteBooking(id);
 
-        //noContent gives 204 - success, notFound gives 404.
+
         return deleted ? ResponseEntity.noContent().build(): ResponseEntity.notFound().build();
     }
 
