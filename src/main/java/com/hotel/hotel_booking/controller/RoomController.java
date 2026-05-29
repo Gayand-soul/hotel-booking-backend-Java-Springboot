@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/rooms")
 public class RoomController {
 
-    //final instance variable
+
     private final RoomInventory roomInventory;
 
     //constructor
@@ -22,7 +22,7 @@ public class RoomController {
         this.roomInventory = roomInventory;
     }
 
-    //GET /api/rooms-returns available rooms types
+
     @GetMapping
     public ResponseEntity<Map <String, Integer>> getAvailableRooms(){
 
