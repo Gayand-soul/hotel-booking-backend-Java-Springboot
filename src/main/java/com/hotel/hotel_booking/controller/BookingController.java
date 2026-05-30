@@ -38,9 +38,7 @@ public class BookingController {
 
         boolean deleted = bookingService.deleteBooking(id);
 
-
         return deleted ? ResponseEntity.noContent().build(): ResponseEntity.notFound().build();
     }
-
 
 }

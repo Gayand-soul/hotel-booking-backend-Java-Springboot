@@ -20,7 +20,6 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    //instance variables
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
@@ -30,28 +29,29 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    //POST=/api/auth/login
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(
             @RequestParam String username,
             @RequestParam String password) {
 
         try {
-            //1. Authenticate the user
+
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
 
-            //Extract role from authenticated user
+
             String role = auth.getAuthorities().stream()
                     .findFirst()
                     .map(GrantedAuthority::getAuthority)
                     .orElse("ROLE_USER");
 
-            //2. Generate token
+
             String token = jwtUtil.generateToken(auth.getName(), role);
 
-            //3. Return token
+
             return ResponseEntity.ok(Map.of("token", token, "role", role));
+
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)

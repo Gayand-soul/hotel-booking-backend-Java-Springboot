@@ -9,3 +9,5 @@ public class RoomFullyBookedException extends RuntimeException {
         super("No available rooms of type "+ roomType + ".");
     }
 }
+
+
