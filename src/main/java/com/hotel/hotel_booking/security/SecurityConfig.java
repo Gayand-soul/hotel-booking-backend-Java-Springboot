@@ -26,13 +26,13 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    // ── 1. Password encoder ─────────────────────────────────────────
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ── 2. In-memory users ──────────────────────────────────────────
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         var user = User.builder()
@@ -50,46 +50,46 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(user, admin);
     }
 
-    // ── 3. AuthenticationManager ────────────────────────────────────
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ── 4. Security filter chain ────────────────────────────────────
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF — not needed for stateless REST APIs
+
                 .csrf(csrf -> csrf.disable())
 
-                // Authorization rules
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // Login endpoint — public
+
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
-                        // GET /api/rooms — anyone
+
                         .requestMatchers(HttpMethod.GET, "/api/rooms").permitAll()
 
-                        // POST /api/bookings — USER or ADMIN
+
                         .requestMatchers(HttpMethod.POST, "/api/bookings").hasAnyRole("USER", "ADMIN")
 
-                        // GET /api/bookings — ADMIN only
+
                         .requestMatchers(HttpMethod.GET, "/api/bookings/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/bookings").hasRole("ADMIN")
 
-                        // DELETE /api/bookings/** — ADMIN only
+
                         .requestMatchers(HttpMethod.DELETE, "/api/bookings/**").hasRole("ADMIN")
 
-                        // Everything else requires authentication
+
                         .anyRequest().authenticated()
                 )
 
-                // Register JwtFilter before Spring's username/password filter
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // Keep Basic Auth disabled — JWT only from now on
+
                 .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
